@@ -5,15 +5,25 @@
   authors: (
     (
       (
-        name: "Tzu-Ming (Harry) Hsu",
+        name: "徐子旻 (Tzu-Ming Harry Hsu)",
         affl: "independent",
         email: "stmharry@alum.mit.edu",
+      ),
+      (
+        name: "張煦 (Josh Chang)",
+        affl: "cat-fish",
+        email: "joshfreediving@gmail.com",
       ),
     ),
     (
       independent: (
         institution: "獨立研究者",
         location: "臺北",
+        country: "臺灣",
+      ),
+      cat-fish: (
+        institution: "貓魚小姐的海洋生活",
+        location: "恆春",
         country: "臺灣",
       ),
     ),

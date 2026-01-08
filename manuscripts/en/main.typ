@@ -5,15 +5,25 @@
   authors: (
     (
       (
-        name: "Tzu-Ming (Harry) Hsu",
+        name: "Tzu-Ming Harry Hsu",
         affl: "independent",
         email: "stmharry@alum.mit.edu",
+      ),
+      (
+        name: "Josh Chang",
+        affl: "cat-fish",
+        email: "joshfreediving@gmail.com",
       ),
     ),
     (
       independent: (
         institution: "Independent Researcher",
         location: "Taipei",
+        country: "Taiwan",
+      ),
+      cat-fish: (
+        institution: "Cat-Fish Ocean Life",
+        location: "Hengchun",
         country: "Taiwan",
       ),
     ),
@@ -28,9 +38,9 @@
     "Oxygen budget normalization", 
     "Training prescription and diagnostics",
   ),
-  abstract: include "en/abstract.typ",
+  abstract: include "abstract.typ",
   bibliography: bibliography("../lib/main.bib"),
-  appendix: include "en/appendix.typ",
+  appendix: include "appendix.typ",
   accepted: none,
 )
 

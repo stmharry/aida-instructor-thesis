@@ -26,7 +26,7 @@ MANUSCRIPT_PDFS = \
 main: $(MANUSCRIPT_PDFS)
 
 $(MANUSCRIPT_DIR)/%/main.pdf: $(MANUSCRIPT_DIR)/%/main.typ $(MANUSCRIPT_IMAGES)
-	@$(TYPST) compile $< $@ 
+	@$(TYPST) compile $< $@ --root . 
 
 $(MANUSCRIPT_DIR)/zh-cn/main.typ: $(MANUSCRIPT_DIR)/zh-tw/main.typ
 	@set -eu; \

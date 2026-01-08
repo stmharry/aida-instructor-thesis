@@ -9,11 +9,21 @@
         affl: "independent",
         email: "stmharry@alum.mit.edu",
       ),
+      (
+        name: "张煦 (Josh Chang)",
+        affl: "cat-fish",
+        email: "joshfreediving@gmail.com",
+      ),
     ),
     (
       independent: (
         institution: "独立研究者",
         location: "台北",
+        country: "台湾",
+      ),
+      cat-fish: (
+        institution: "猫鱼小姐的海洋生活",
+        location: "恒春",
         country: "台湾",
       ),
     ),
