@@ -1,7 +1,10 @@
 TYPST ?= typst
-PYTHON ?= python
 MAGICK ?= magick -density 300
 CODEX ?= codex
+UV ?= uv
+PYTHON ?= python
+
+MANUSCRIPT_DIR ?= manuscripts
 
 STATIC_IMAGES = \
 	images/depth-vs-dive.jpg \
@@ -17,13 +20,21 @@ MANUSCRIPT_IMAGES = \
 	$(PLOT_FRONTIER_ZX_TARGETS)
 
 .PHONY: main
-main: main.en.pdf main.zh-tw.pdf
+main: $(MANUSCRIPT_DIR)/main.en.pdf $(MANUSCRIPT_DIR)/main.zh-tw.pdf
 
-main.zh-tw.typ: TRANSLATION.zh-tw.md
-	@$(CODEX) exec $< 
-
-main.%.pdf: main.%.typ $(MANUSCRIPT_IMAGES)
+$(MANUSCRIPT_DIR)/main.%.pdf: $(MANUSCRIPT_DIR)/main.%.typ $(MANUSCRIPT_IMAGES)
 	@$(TYPST) compile $< $@ 
+
+$(MANUSCRIPT_DIR)/main.zh-cn.typ: $(MANUSCRIPT_DIR)/main.zh-tw.typ
+	@set -eu; \
+	find $(MANUSCRIPT_DIR) -name '*.typ' \( -path '*/zh-tw/*' -o -name 'main.zh-tw.typ' \) | while read -r source; do \
+	  target=$$(echo "$$source" | sed 's#/zh-tw/#/zh-cn/#; s#main.zh-tw.typ#main.zh-cn.typ#'); \
+	  mkdir -p "$$(dirname "$$target")"; \
+	  opencc -c t2s.json -i "$$source" -o "$$target"; \
+	done
+
+$(MANUSCRIPT_DIR)/main.zh-tw.typ: $(MANUSCRIPT_DIR)/TRANSLATION.zh-tw.md
+	@$(CODEX) exec $< 
 
 %.png: %.pdf
 	@$(MAGICK) $< $@

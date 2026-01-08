@@ -8,14 +8,14 @@ and CSV data.
 
 **Original**
 
-- `main.en.typ`: Primary manuscript source (Typst).
-- `TRANSLATION.zh-tw.md`: Translation notes and the Markdown source used to translate `main.zh-tw.typ`.
+- `manuscripts/main.en.typ`: Primary manuscript source (Typst).
+- `manuscripts/TRANSLATION.zh-tw.md`: Translation notes and the Markdown source used to translate `manuscripts/main.zh-tw.typ`.
 - `data/`: Input data and generated CSV outputs for experiments.
 - `scripts/`: Python scripts for analysis and plotting.
 
 **Derivatives**
 
-- `main.zh-tw.typ`: Translated manuscript source (Typst), not the native drafting file.
+- `manuscripts/main.zh-tw.typ`: Translated manuscript source (Typst), not the native drafting file.
 - `images/`: Generated figures (PDF/PNG).
 
 **Project**

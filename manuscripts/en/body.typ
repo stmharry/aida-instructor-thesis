@@ -12,7 +12,7 @@ Even within a single discipline, a diver's outcome depends on pacing, profile ch
 As a result, much of freediving training remains experience-based: highly effective in the hands of good coaches, but difficult to generalize, quantify, or diagnose when progress stalls. This work asks whether we can turn the informal notion of "limits" into a quantitative object that is both explanatory and actionable.
 
 #figure(
-  image("../images/depth-vs-dive.jpg"),
+  image("../../images/depth-vs-dive.jpg"),
   caption: [
     *Dive Maximum Depth Across Sessions.* 
     This is a snapshot directly extracted from my #link("https://colab.research.google.com/drive/1Xaw7GBXP_hh8jce_TXNmNncG6fZMyukZ?usp=sharing")[Google Colab notebook] that tracks my personal freediving progress over time.
@@ -23,7 +23,7 @@ As a result, much of freediving training remains experience-based: highly effect
 ) <fig:depth-vs-dive>
 
 #figure(
-  image("../images/depth-vs-time.jpg"),
+  image("../../images/depth-vs-time.jpg"),
   caption: [
     *Max Depth vs. Total Dive Time Across Sessions.* 
     Each point is a single dive, with maximum depth (m) plotted against total dive time (s); color encodes session number (earlier → later).
@@ -177,7 +177,7 @@ We define two primary observables:
 An example profile with these definitions marked is shown in @fig:example-profile.
 
 #figure(
-  image("../images/example-profile.pdf"),
+  image("../../images/example-profile.pdf"),
   caption: [
     *Example Dive Profile and Definitions.*
     The depth trace $z(t)$ is shown with $z = 0$ at the surface (positive downward).
@@ -472,7 +472,7 @@ The attempt terminates when the first limiting factor is reached.
 In this exploratory analysis we track two physiological resources: usable #O2 and #CO2 tolerance.
 
 #figure(
-  image("../images/example-budget.pdf"),
+  image("../../images/example-budget.pdf"),
   caption: [
     *Conceptual Framework for Integrated Resource Bookkeeping in Freediving.*
     The figure illustrates the dual-constraint model where dive time ($T$) is determined by the first of $E_#O2$ or $E_#CO2$ to reach 1.
@@ -708,7 +708,7 @@ The $y$-axis is the maximum depth $D := max_(t) z(t)$, as shown in @fig:td-diagr
 The T–D plot uses an inverted $y$-axis: $D = 0$ is at the top, and larger depths appear lower.
 
 #figure(
-  image("../images/td-diagram.pdf"),
+  image("../../images/td-diagram.pdf"),
   caption: [
     *Dive Time–Depth (T–D) Diagram with Representative Dives and Feasible Regions.*
     Each gray point is a recorded dive summarized by total time $T$ (x-axis) and maximum depth $D$ (y-axis, inverted); the dataset consists of my own dive logs collected over roughly two years using a Mission One watch from Atmos, covering every dive across 110+ sessions and totaling over 1,800 dives.
@@ -739,7 +739,7 @@ It is a choice of dive profile, and that profile becomes a single point on the T
 Selected dive profiles illustrating these representative points are shown in @fig:dive-profiles, and the same dives are highlighted as colored markers in @fig:td-diagram.
 
 #figure(
-  image("../images/dive-profiles.pdf"),
+  image("../../images/dive-profiles.pdf"),
   caption: [
     *Representative Dive Profiles Underlying Points in the T–D Diagram.*
     Each curve shows depth versus time for a single dive, drawn directly from my personal dive logs, including a personal best dive (FIM), a slow depth emphasis dive around #qty[30][m] (FIM), a sprint dive to about #qty[20][m] (CWTB), and a static apnea (STA) trace at $D=0$.
@@ -867,7 +867,7 @@ Each dive profile maps to one point $(T, D)$, and the collection of points forms
 Given a fixed model and parameters, the same constraints induce a *predicted* feasible band whose left and right edges are the fast and slow frontiers.
 
 #figure(
-  image("../images/frontiers.pdf"),
+  image("../../images/frontiers.pdf"),
   caption: [
     *Sample Fast and Slow Performance Frontiers.* Gray points show the author's recorded dives plotted by total dive time $T$ (x-axis) and maximum depth $D$ (y-axis, inverted so deeper dives appear lower).
     The shaded green band indicates the model-predicted feasible region between the theoretical fast frontier (dashed) and slow frontier (dotted), while the red shading indicates infeasible $(T, D)$ pairs under the same parameter set and assumptions.
@@ -913,7 +913,7 @@ Beyond the geometry of @fig:example-frontier, the theoretical frontiers also exp
 This turns the frontier curves from "just envelopes" into an interpretable accounting of what limits the diver as depth increases.
 
 #figure(
-  image("../images/frontier-usage.pdf"),
+  image("../../images/frontier-usage.pdf"),
   caption: [
     *Resource Usage Along the Fast and Slow Frontiers.* The $y$-axis is maximum depth $D$ (inverted so deeper dives appear lower).
     *Left:* Peak mechanical force and peak mechanical power along the optimal profile, reported as a percentage of the corresponding constraint limit.
@@ -942,7 +942,7 @@ In both figures, each panel corresponds to a fixed target depth $D$, the x-axis 
 All panels use an aligned time axis range so the duration scales are directly comparable across depth targets.
 
 #figure(
-  image("../images/frontier-profiles-fast.pdf", height: 85%),
+  image("../../images/frontier-profiles-fast.pdf", height: 85%),
   caption: [
     *Fast-Frontier Optimal Dive Profiles (Depth, Speed, Thrust, and Oxygen Usage).* Each panel shows the minimum-time round trip to a target depth $D$ under the same instantaneous force / power caps and the oxygen-budget constraint.
     Depth exhibits a characteristic V-shape, speed changes sign at the turn, and thrust is continuously modulated with a sharp sign flip between descent and ascent; the fourth axis reports cumulative oxygen usage as a percentage of the budget.
@@ -952,7 +952,7 @@ All panels use an aligned time axis range so the duration scales are directly co
 ) <fig:fast-frontier-profiles>
 
 #figure(
-  image("../images/frontier-profiles-slow.pdf", height: 85%),
+  image("../../images/frontier-profiles-slow.pdf", height: 85%),
   caption: [
     *Slow-Frontier Optimal Dive Profiles (Depth, Speed, Thrust, and Oxygen Usage).* Each panel shows the maximum-time pacing strategy to the same target depths $D$ under the oxygen-budget constraint and the same instantaneous caps.
     As in the fast case, depth follows a V-shape and both speed and thrust switch sign at the turn, but the pacing differs markedly in how thrust is allocated over depth and time; the fourth axis reports cumulative oxygen usage as a percentage of the budget.
@@ -982,7 +982,7 @@ Practically, this motivates drills that target *controlled, depth-dependent paci
 === Performance Bands by Effort Level <sec:effort-bands>
 
 #figure(
-  image("../images/frontiers-efforts.pdf"),
+  image("../../images/frontiers-efforts.pdf"),
   caption: [
     *Frontiers by Effort Level.* The same T–D diagram as @fig:example-frontier, but stratified by effort fraction.
     Each colored band corresponds to dives whose modeled total effort $E$ falls within a fixed percentage range of the diver's full budget (e.g., 0--20%, 20--30%, …, 90--100%).
@@ -1013,8 +1013,8 @@ The purpose of this section is to show that the framework generalizes: once para
 #figure(
   grid(
     columns: 2,
-    image("../images/zx.b.jpg", height: 175pt),
-    image("../images/zx.a.jpg", height: 175pt),
+    image("../../images/zx.b.jpg", height: 175pt),
+    image("../../images/zx.a.jpg", height: 175pt),
   ),
   caption: [
     *Region-Level Champion Diver.*
@@ -1029,7 +1029,7 @@ He is famously known for using plastic bi-fins to dive to his then-near personal
 His personal best records are CWTB #qty[69][m] and STA #qty[245][s], where these are official / recorded PBs and training or discipline-specific maxima may differ.
 
 #figure(
-  image("../images/frontiers.zx.pdf"),
+  image("../../images/frontiers.zx.pdf"),
   caption: [
     *Performance Frontier for the Region-Level Champion Diver.*
     Gray points are the diver's recorded dives mapped onto the T–D diagram.
@@ -1040,7 +1040,7 @@ His personal best records are CWTB #qty[69][m] and STA #qty[245][s], where these
 ) <fig:generalization-zx-frontier>
 
 #figure(
-  image("../images/frontier-usage.zx.pdf"),
+  image("../../images/frontier-usage.zx.pdf"),
   caption: [
     *Resource Usage Along the Region-Level Champion Diver's Frontiers.*
     *Left:* Peak force and peak power utilization as a percentage of the corresponding capacity limits, evaluated along the frontier-optimal profiles.
@@ -1079,7 +1079,7 @@ In his #link("http://xhslink.com/o/5L5ntMLBFnk")[long-form reflection video] @yu
 He opens with a blunt disclaimer: "Dive Time可能是一个伪命题" ("dive time may be a pseudo-question"), and emphasizes "最终以个人感受为主" ("ultimately prioritize personal sensation").
 
 #figure(
-  image("../images/yzy.jpg", width: 30%),
+  image("../../images/yzy.jpg", width: 30%),
   caption: [
     于志瀛 (Zhiying Yu), in a training reflection video discussing "dynamic time," ascent bottlenecks, and the limited transfer between depth and pool dynamics.
     In this subsection, his qualitative observations are used as an external point of comparison for the theoretical notions of feasibility, constraint switching, and frontier-based proxy training.

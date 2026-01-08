@@ -12,7 +12,7 @@
 因此，自由潛水訓練多半仍以經驗為基礎：在優秀教練手中非常有效，但當進展停滯時，很難概化、量化或診斷。本研究想問的是，能否將非正式的「極限」概念轉化為既能解釋、又可操作的量化對象。
 
 #figure(
-  image("../images/depth-vs-dive.jpg"),
+  image("../../images/depth-vs-dive.jpg"),
   caption: [
     *下潛最大深度跨場次變化。* 
     這是直接從我的 #link("https://colab.research.google.com/drive/1Xaw7GBXP_hh8jce_TXNmNncG6fZMyukZ?usp=sharing")[Google Colab notebook] 擷取的快照，用以追蹤我個人的自由潛水進展。
@@ -23,7 +23,7 @@
 ) <fig:depth-vs-dive>
 
 #figure(
-  image("../images/depth-vs-time.jpg"),
+  image("../../images/depth-vs-time.jpg"),
   caption: [
     *最大深度與總下潛時間跨場次比較。* 
     每個點是一趟下潛，最大深度（m）對總下潛時間（s）；顏色表示場次編號（較早 → 較晚）。
@@ -175,7 +175,7 @@ CFD 分析進一步顯示姿態改變可在水下滑行時產生顯著且系統�
 示意側寫與上述定義如 @fig:example-profile 所示。
 
 #figure(
-  image("../images/example-profile.pdf"),
+  image("../../images/example-profile.pdf"),
   caption: [
     *下潛側寫與定義示例。*
     深度軌跡 $z(t)$ 以水面 $z = 0$ 為基準（向下為正）。
@@ -468,7 +468,7 @@ $ <eq:eom-nondim-lambda>
 在此探索性分析中，我們追蹤兩個生理資源：可用 #O2 與 #CO2 耐受度。
 
 #figure(
-  image("../images/example-budget.pdf"),
+  image("../../images/example-budget.pdf"),
   caption: [
     *自由潛水中累積式資源累計的概念框架。*
     圖中呈現雙重約束模型，其中下潛時間（$T$）由 $E_#O2$ 或 $E_#CO2$ 先達到 1 的那一個決定。
@@ -693,7 +693,7 @@ $y$ 軸為最大深度 $D := max_(t) z(t)$，如 @fig:td-diagram 所示。
 時間–深度圖（T–D Diagram）採用反向 $y$ 軸：$D = 0$ 在上方，深度越大越往下。
 
 #figure(
-  image("../images/td-diagram.pdf"),
+  image("../../images/td-diagram.pdf"),
   caption: [
     *下潛時間–深度（T–D）圖與代表性下潛及可達區間。*
     每個灰點是記錄下潛，以總時間 $T$（x 軸）與最大深度 $D$（y 軸，反向）摘要；資料集由我約兩年使用 Atmos 的 Mission One 潛水錶所記錄的個人下潛紀錄構成，涵蓋 110+ 場次的所有下潛，合計超過 1,800 次。
@@ -724,7 +724,7 @@ $y$ 軸為最大深度 $D := max_(t) z(t)$，如 @fig:td-diagram 所示。
 代表這些點的下潛側寫如 @fig:dive-profiles 所示，且同樣的下潛在 @fig:td-diagram 中以彩色標記呈現。
 
 #figure(
-  image("../images/dive-profiles.pdf"),
+  image("../../images/dive-profiles.pdf"),
   caption: [
     *T–D 圖中點所對應的代表性下潛側寫。*
     每條曲線顯示單次下潛的深度與時間關係，直接取自我的個人下潛紀錄，包括個人最佳下潛（FIM）、約 #qty[30][m] 的慢深度下潛（FIM）、約 #qty[20][m] 的衝刺下潛（CWTB），以及 $D=0$ 的靜態閉氣（STA）軌跡。
@@ -852,7 +852,7 @@ $ <eq:slow-frontier-opt>
 在固定模型與參數下，相同約束導致*預測*可行帶，其左、右邊界即為最快與最慢前沿。
 
 #figure(
-  image("../images/frontiers.pdf"),
+  image("../../images/frontiers.pdf"),
   caption: [
     *示例最快與最慢表現前沿。* 灰點為作者的紀錄下潛，以總下潛時間 $T$（x 軸）與最大深度 $D$（y 軸，反向使更深下潛更低）繪製。
     綠色陰影帶表示模型預測的可達區間，介於理論最快前沿（虛線）與最慢前沿（點線）之間，而紅色陰影表示在同一參數集與假設下不可行的 $(T, D)$ 配對。
@@ -898,7 +898,7 @@ $ <eq:slow-frontier-opt>
 這使前沿曲線從「只是包絡」轉為可解釋的限制因子帳本。
 
 #figure(
-  image("../images/frontier-usage.pdf"),
+  image("../../images/frontier-usage.pdf"),
   caption: [
     *沿最快與最慢前沿的資源使用。* $y$ 軸為最大深度 $D$（反向使更深下潛更低）。
     *左：* 最優側寫上的峰值機械力量與峰值機械功率，以相對於各自約束上限的百分比表示。
@@ -927,7 +927,7 @@ $ <eq:slow-frontier-opt>
 所有面板使用對齊的時間軸範圍，以便跨深度目標直接比較持續時間尺度。
 
 #figure(
-  image("../images/frontier-profiles-fast.pdf", height: 85%),
+  image("../../images/frontier-profiles-fast.pdf", height: 85%),
   caption: [
     *最快前沿最優下潛側寫（深度、速度、推進力與氧氣使用）。* 每個面板顯示在相同的瞬時力量／功率上限與氧氣預算約束下，到目標深度 $D$ 的最小時間往返。
     深度呈現典型 V 形，速度在轉折處變號，推進力在下潛與上浮之間持續調制並出現明顯的符號翻轉；第四軸報告累積氧氣使用的預算百分比。
@@ -937,7 +937,7 @@ $ <eq:slow-frontier-opt>
 ) <fig:fast-frontier-profiles>
 
 #figure(
-  image("../images/frontier-profiles-slow.pdf", height: 85%),
+  image("../../images/frontier-profiles-slow.pdf", height: 85%),
   caption: [
     *最慢前沿最優下潛側寫（深度、速度、推進力與氧氣使用）。* 每個面板顯示在氧氣預算約束與相同瞬時上限下，到相同目標深度 $D$ 的最大時間配速策略。
     與最快情況相同，深度呈 V 形且速度與推進力在轉折處變號，但配速在推進力於深度與時間上的分配上有明顯差異；第四軸報告累積氧氣使用的預算百分比。
@@ -967,7 +967,7 @@ $ <eq:slow-frontier-opt>
 === 依努力程度的表現區帶 <sec:effort-bands>
 
 #figure(
-  image("../images/frontiers-efforts.pdf"),
+  image("../../images/frontiers-efforts.pdf"),
   caption: [
     *按努力程度分層的前沿。* 與 @fig:example-frontier 相同的 T–D 圖，但依努力比例分層。
     每個彩色區帶對應模型總努力 $E$ 落在潛水員完整預算固定百分比範圍內的下潛（例如 0--20%、20--30%、…、90--100%）。
@@ -998,8 +998,8 @@ $ <eq:slow-frontier-opt>
 #figure(
   grid(
     columns: 2,
-    image("../images/zx.b.jpg", height: 175pt),
-    image("../images/zx.a.jpg", height: 175pt),
+    image("../../images/zx.b.jpg", height: 175pt),
+    image("../../images/zx.a.jpg", height: 175pt),
   ),
   caption: [
     *區域級冠軍潛水員。*
@@ -1014,7 +1014,7 @@ $ <eq:slow-frontier-opt>
 他的個人最佳紀錄為 CWTB #qty[69][m] 與 STA #qty[245][s]，這些為官方／紀錄 PB，而訓練或項目特定最大值可能不同。
 
 #figure(
-  image("../images/frontiers.zx.pdf"),
+  image("../../images/frontiers.zx.pdf"),
   caption: [
     *區域級冠軍潛水員的表現前沿。*
     灰點為該潛水員的紀錄下潛映射至 T–D 圖。
@@ -1025,7 +1025,7 @@ $ <eq:slow-frontier-opt>
 ) <fig:generalization-zx-frontier>
 
 #figure(
-  image("../images/frontier-usage.zx.pdf"),
+  image("../../images/frontier-usage.zx.pdf"),
   caption: [
     *區域級冠軍潛水員前沿上的資源使用。*
     *左：* 沿前沿最優側寫評估的峰值力量與峰值功率使用率，相對於對應能力上限的百分比。
@@ -1065,7 +1065,7 @@ $ <eq:slow-frontier-opt>
 
 
 #figure(
-  image("../images/yzy.jpg", width: 30%),
+  image("../../images/yzy.jpg", width: 30%),
   caption: [
     于志瀛（Zhiying Yu）在訓練反思影片中討論「動態時間」、上浮瓶頸與深度與泳池動態之間的有限轉移。
     在本小節中，他的質性觀察被用作可行性、約束切換與前沿代理訓練的外部對照。
