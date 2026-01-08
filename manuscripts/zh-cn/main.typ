@@ -1,4 +1,4 @@
-#import "lib/tmlr.typ": tmlr
+#import "../lib/tmlr.typ": tmlr
 
 #show: tmlr.with(
   title: [自由潜水中的表现前沿（Performance Frontier）：探索性分析],
@@ -28,9 +28,9 @@
     "氧气预算标准化（Oxygen budget normalization)", 
     "训练处方与诊断（Training prescription and diagnostics)",
   ),
-  abstract: include "zh-cn/abstract.typ",
-  bibliography: bibliography("lib/main.bib"),
-  appendix: include "zh-cn/appendix.typ",
+  abstract: include "abstract.typ",
+  bibliography: bibliography("../lib/main.bib"),
+  appendix: include "appendix.typ",
   accepted: none,
   aux: (
     font-family: (
@@ -63,4 +63,4 @@
   doc
 }
 
-#include "zh-cn/body.typ"
+#include "body.typ"

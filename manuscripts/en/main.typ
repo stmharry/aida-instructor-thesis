@@ -1,4 +1,4 @@
-#import "lib/tmlr.typ": tmlr
+#import "../lib/tmlr.typ": tmlr
 
 #show: tmlr.with(
   title: [Performance Frontier in Freediving: An Exploratory Analysis],
@@ -29,7 +29,7 @@
     "Training prescription and diagnostics",
   ),
   abstract: include "en/abstract.typ",
-  bibliography: bibliography("lib/main.bib"),
+  bibliography: bibliography("../lib/main.bib"),
   appendix: include "en/appendix.typ",
   accepted: none,
 )
@@ -40,4 +40,4 @@
   doc
 }
 
-#include "en/body.typ"
+#include "body.typ"

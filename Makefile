@@ -4,8 +4,6 @@ CODEX ?= codex
 UV ?= uv
 PYTHON ?= python
 
-MANUSCRIPT_DIR ?= manuscripts
-
 STATIC_IMAGES = \
 	images/depth-vs-dive.jpg \
 	images/depth-vs-time.jpg \
@@ -19,21 +17,26 @@ MANUSCRIPT_IMAGES = \
 	$(PLOT_FRONTIER_DEFAULT_TARGETS) \
 	$(PLOT_FRONTIER_ZX_TARGETS)
 
-.PHONY: main
-main: $(MANUSCRIPT_DIR)/main.en.pdf $(MANUSCRIPT_DIR)/main.zh-tw.pdf
+LOCALES = en zh-tw zh-cn
+MANUSCRIPT_DIR = manuscripts
+MANUSCRIPT_PDFS = \
+	$(patsubst %, $(MANUSCRIPT_DIR)/%/main.pdf, $(LOCALES))
 
-$(MANUSCRIPT_DIR)/main.%.pdf: $(MANUSCRIPT_DIR)/main.%.typ $(MANUSCRIPT_IMAGES)
+.PHONY: main
+main: $(MANUSCRIPT_PDFS)
+
+$(MANUSCRIPT_DIR)/%/main.pdf: $(MANUSCRIPT_DIR)/%/main.typ $(MANUSCRIPT_IMAGES)
 	@$(TYPST) compile $< $@ 
 
-$(MANUSCRIPT_DIR)/main.zh-cn.typ: $(MANUSCRIPT_DIR)/main.zh-tw.typ
+$(MANUSCRIPT_DIR)/zh-cn/main.typ: $(MANUSCRIPT_DIR)/zh-tw/main.typ
 	@set -eu; \
-	find $(MANUSCRIPT_DIR) -name '*.typ' \( -path '*/zh-tw/*' -o -name 'main.zh-tw.typ' \) | while read -r source; do \
-	  target=$$(echo "$$source" | sed 's#/zh-tw/#/zh-cn/#; s#main.zh-tw.typ#main.zh-cn.typ#'); \
+	find $(MANUSCRIPT_DIR)/zh-tw -name '*.typ' | while read -r source; do \
+	  target=$$(echo "$$source" | sed 's#/zh-tw/#/zh-cn/#'); \
 	  mkdir -p "$$(dirname "$$target")"; \
 	  opencc -c t2s.json -i "$$source" -o "$$target"; \
 	done
 
-$(MANUSCRIPT_DIR)/main.zh-tw.typ: $(MANUSCRIPT_DIR)/TRANSLATION.zh-tw.md
+$(MANUSCRIPT_DIR)/zh-tw/main.typ: $(MANUSCRIPT_DIR)/zh-tw/TRANSLATION.md
 	@$(CODEX) exec $< 
 
 %.png: %.pdf

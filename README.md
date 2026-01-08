@@ -8,14 +8,16 @@ and CSV data.
 
 **Original**
 
-- `manuscripts/main.en.typ`: Primary manuscript source (Typst).
-- `manuscripts/TRANSLATION.zh-tw.md`: Translation notes and the Markdown source used to translate `manuscripts/main.zh-tw.typ`.
+- `manuscripts/en/main.typ`: Primary manuscript source (Typst).
+- `manuscripts/zh-tw/TRANSLATION.md`: Translation notes and the Markdown source used to translate `manuscripts/zh-tw/main.typ`.
 - `data/`: Input data and generated CSV outputs for experiments.
 - `scripts/`: Python scripts for analysis and plotting.
 
 **Derivatives**
 
-- `manuscripts/main.zh-tw.typ`: Translated manuscript source (Typst), not the native drafting file.
+- `manuscripts/zh-tw/main.typ`: Translated manuscript source (Typst), not the native drafting file.
+- `manuscripts/zh-cn/main.typ`: Simplified Chinese translation generated from zh-tw.
+- `manuscripts/*/main.pdf`: Compiled manuscripts by locale.
 - `images/`: Generated figures (PDF/PNG).
 
 **Project**
@@ -29,6 +31,7 @@ and CSV data.
 - [Python 3.13+](https://formulae.brew.sh/formula/python@3.13) for analysis and plotting.
 - [uv](https://formulae.brew.sh/formula/uv) for managing the Python environment.
 - [ImageMagick](https://formulae.brew.sh/formula/imagemagick) (`magick`) for PDF → PNG conversions (optional).
+- [OpenCC](https://formulae.brew.sh/formula/opencc) (`opencc`) for zh-tw → zh-cn conversion.
 
 ## Setup
 
