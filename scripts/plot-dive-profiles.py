@@ -51,19 +51,13 @@ def main() -> None:
         default="images/dive-profiles.pdf",
         help="Output image path (default: images/dive-profiles.pdf)",
     )
-    parser.add_argument(
-        "--exclude",
-        default="dives.csv",
-        help="Comma-separated filenames to exclude (default: dives.csv)",
-    )
     args = parser.parse_args()
 
     input_dir = Path(args.input_dir)
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    exclude = {name.strip() for name in args.exclude.split(",") if name.strip()}
-    csv_paths = sorted(p for p in input_dir.glob("*.csv") if p.name not in exclude)
+    csv_paths = sorted(input_dir.glob("dive.*.csv"))
     if not csv_paths:
         raise SystemExit("No dive profile CSV files found.")
 
@@ -75,9 +69,10 @@ def main() -> None:
 
     fig, ax = plt.subplots(figsize=(10, 4.0))
     for path, times, depths in profiles:
-        color = PROFILE_COLORS.get(path.stem, "#1f77b4")
+        profile_key = path.stem.removeprefix("dive.")
+        color = PROFILE_COLORS.get(profile_key, "#1f77b4")
         ax.plot(times, depths, linewidth=1.0, color=color)
-        label = PROFILE_LABELS.get(path.stem, f"Dive Profile: {path.stem}")
+        label = PROFILE_LABELS.get(profile_key, f"Dive Profile: {profile_key}")
         anchor_idx = int(0.75 * (len(times) - 1))
         ax.annotate(
             label,

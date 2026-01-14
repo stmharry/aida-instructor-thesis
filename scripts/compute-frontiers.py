@@ -544,6 +544,7 @@ def compute_slow_frontier(
     rows = []
     profile_rows = []
     lam_seed = None
+    budget = params.V_o2 * effort
     for D in D_grid:
         if D < slow_start:
             rows.append(
