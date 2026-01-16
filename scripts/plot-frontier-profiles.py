@@ -11,7 +11,40 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.family"] = ["Arial", "Heiti TC", "sans-serif"]
+
+TRANSLATIONS = {
+    "en": {
+        "title": "Optimal Dive Profiles at Performance Frontiers ({frontier})",
+        "frontier_fast": "Fast",
+        "frontier_slow": "Slow",
+        "depth_target": "Depth Target: {depth:.1f} m",
+        "ylabel_depth": "Depth (m)",
+        "ylabel_speed": "Speed (m/s)",
+        "ylabel_force": "Force (N)",
+        "ylabel_o2": "$O_2$ Used (%)",
+        "xlabel_time": "Elapsed Dive Time (s)",
+        "legend_depth": "Depth",
+        "legend_speed": "Speed",
+        "legend_force": "Force",
+        "legend_o2": "$O_2$ Used",
+    },
+    "zh-tw": {
+        "title": "表現邊界的最佳潛水剖面（{frontier}）",
+        "frontier_fast": "快速",
+        "frontier_slow": "慢速",
+        "depth_target": "目標深度：{depth:.1f} 米",
+        "ylabel_depth": "深度（米）",
+        "ylabel_speed": "速度（米/秒）",
+        "ylabel_force": "力（牛頓）",
+        "ylabel_o2": "O₂ 使用（%）",
+        "xlabel_time": "潛水經過時間（秒）",
+        "legend_depth": "深度",
+        "legend_speed": "速度",
+        "legend_force": "力",
+        "legend_o2": "O₂ 使用",
+    },
+}
 
 
 def load_dives(csv_path: str) -> float:
@@ -116,7 +149,7 @@ def plot_profiles(
     outpath: str,
     profiles_df: pd.DataFrame,
     depths: List[float],
-    title: str,
+    labels: dict,
     frontier: str,
     effort: float,
     T_sta: float,
@@ -143,7 +176,7 @@ def plot_profiles(
     max_time = 0.0
 
     for ax, target_depth in zip(axes, depths):
-        ax.set_title(f"Depth Target: {target_depth:.1f} m")
+        ax.set_title(labels["depth_target"].format(depth=target_depth))
         ax_speed = ax.twinx()
         ax_force = ax.twinx()
         ax_o2 = ax.twinx()
@@ -212,10 +245,10 @@ def plot_profiles(
 
         max_time = max(max_time, float(np.nanmax(series["t"])))
 
-        ax.set_ylabel("Depth (m)")
-        ax_speed.set_ylabel("Speed (m/s)")
-        ax_force.set_ylabel("Force (N)")
-        ax_o2.set_ylabel("$O_2$ Used (%)")
+        ax.set_ylabel(labels["ylabel_depth"])
+        ax_speed.set_ylabel(labels["ylabel_speed"])
+        ax_force.set_ylabel(labels["ylabel_force"])
+        ax_o2.set_ylabel(labels["ylabel_o2"])
         ax.invert_yaxis()
         ax.grid(True, linewidth=0.5, alpha=0.5)
 
@@ -229,15 +262,29 @@ def plot_profiles(
 
         handles = [
             plt.Line2D(
-                [0], [0], color=metric_colors["depth"], linestyle="-", label="Depth"
+                [0],
+                [0],
+                color=metric_colors["depth"],
+                linestyle="-",
+                label=labels["legend_depth"],
             ),
             plt.Line2D(
-                [0], [0], color=metric_colors["speed"], linestyle="-", label="Speed"
+                [0],
+                [0],
+                color=metric_colors["speed"],
+                linestyle="-",
+                label=labels["legend_speed"],
             ),
             plt.Line2D(
-                [0], [0], color=metric_colors["force"], linestyle="-", label="Force"
+                [0],
+                [0],
+                color=metric_colors["force"],
+                linestyle="-",
+                label=labels["legend_force"],
             ),
-            plt.Line2D([0], [0], color="#8c564b", linestyle="-", label="$O_2$ Used"),
+            plt.Line2D(
+                [0], [0], color="#8c564b", linestyle="-", label=labels["legend_o2"]
+            ),
         ]
         ax.legend(handles=handles, loc="upper right", fontsize=8, frameon=True)
 
@@ -245,9 +292,9 @@ def plot_profiles(
         for ax in axes:
             ax.set_xlim(0.0, max_time)
 
-    axes[-1].set_xlabel("Elapsed Dive Time (s)")
+    axes[-1].set_xlabel(labels["xlabel_time"])
 
-    fig.suptitle(title)
+    fig.suptitle(labels["title"])
     fig.tight_layout(rect=[0.0, 0.0, 1.0, 0.98])
     fig.savefig(outpath, dpi=220)
 
@@ -291,6 +338,12 @@ def main() -> None:
     parser.add_argument("--F-ref", type=float, default=100.0)
     parser.add_argument("--p", type=float, default=1.6)
     parser.add_argument("--beta", type=float, default=0.20)
+    parser.add_argument(
+        "--lang",
+        default="en",
+        choices=sorted(TRANSLATIONS.keys()),
+        help="Language for plot labels (default: en)",
+    )
     args = parser.parse_args()
 
     os.makedirs(os.path.dirname(args.output_template) or ".", exist_ok=True)
@@ -308,13 +361,19 @@ def main() -> None:
 
     depths = [10.0, 20.0, 30.0, 40.0, float(pb_depth)]
     unique_depths = list(dict.fromkeys(depths))
+    strings = TRANSLATIONS[args.lang]
     for frontier in ["fast", "slow"]:
+        frontier_label = strings[f"frontier_{frontier}"]
+        strings_for_frontier = dict(strings)
+        strings_for_frontier["title"] = strings["title"].format(
+            frontier=frontier_label
+        )
         outpath = args.output_template.format(frontier=frontier)
         plot_profiles(
             outpath,
             profiles_df,
             unique_depths,
-            title=f"Optimal Dive Profiles at Performance Frontiers ({frontier.title()})",
+            labels=strings_for_frontier,
             frontier=frontier,
             effort=args.effort,
             T_sta=args.T_sta,

@@ -42,6 +42,9 @@ $(MANUSCRIPT_DIR)/zh-tw/main.typ: $(MANUSCRIPT_DIR)/zh-tw/TRANSLATION.md
 %.png: %.pdf
 	@$(MAGICK) $< $@
 
+%.jpg: %.pdf
+	@$(MAGICK) $< -quality 70 $@
+
 #
 
 PLOT_TARGETS = \
@@ -84,7 +87,7 @@ PLOT_FRONTIER_DEFAULT_TARGETS = \
 .PHONY: plot-frontier.default.pdf
 plot-frontier.default.pdf: $(PLOT_FRONTIER_DEFAULT_TARGETS) 
 
-.PHONY: plot-frontier.default.png
+.PHONY: ppython scripts/plot-frontiers.py --lang zh-twlot-frontier.default.png
 plot-frontier.default.png: $(PLOT_FRONTIER_DEFAULT_TARGETS:.pdf=.png)
 
 $(FRONTIERS_DEFAULT) $(PROFILES_DEFAULT): scripts/compute-frontiers.py

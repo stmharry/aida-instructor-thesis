@@ -9,7 +9,7 @@ from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 
-plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.family"] = ["Arial", "Heiti TC", "sans-serif"]
 
 
 def load_dives(
@@ -40,16 +40,51 @@ class ExamplePoint:
     color: str
 
 
-EXAMPLE_POINTS = [
-    ExamplePoint(
-        "Personal Best Dive (FIM)", time_s=108.0, depth_m=45.0, color="#ff7f0e"
-    ),
-    ExamplePoint("Slow Dive ~30 M (FIM)", time_s=144.0, depth_m=30.0, color="#2ca02c"),
-    ExamplePoint("STA ~4 Min", time_s=244.0, depth_m=0.0, color="#1f4e79"),
-    ExamplePoint(
-        "Sprint Dive ~20 M (CWTB)", time_s=28.0, depth_m=20.0, color="#d62728"
-    ),
+EXAMPLE_POINT_DATA = [
+    ("personal_best_fim", 108.0, 45.0, "#ff7f0e"),
+    ("slow_dive_30m_fim", 144.0, 30.0, "#2ca02c"),
+    ("sta_4min", 244.0, 0.0, "#1f4e79"),
+    ("sprint_dive_20m_cwtb", 28.0, 20.0, "#d62728"),
 ]
+
+TRANSLATIONS = {
+    "en": {
+        "title": "Dive Time vs. Max Depth",
+        "xlabel": "Dive Time (s)",
+        "ylabel": "Max Depth (m)",
+        "legend_records": "Dive Records",
+        "legend_feasible": "Feasible Region",
+        "legend_infeasible": "Infeasible Region",
+        "examples": {
+            "personal_best_fim": "Personal Best Dive (FIM)",
+            "slow_dive_30m_fim": "Slow Dive ~30 M (FIM)",
+            "sta_4min": "STA ~4 Min",
+            "sprint_dive_20m_cwtb": "Sprint Dive ~20 M (CWTB)",
+        },
+    },
+    "zh-tw": {
+        "title": "潛水時間與最大深度",
+        "xlabel": "潛水時間（秒）",
+        "ylabel": "最大深度（米）",
+        "legend_records": "潛水紀錄",
+        "legend_feasible": "能力可及區域",
+        "legend_infeasible": "能力不可及區域",
+        "examples": {
+            "personal_best_fim": "個人最佳潛水（FIM）",
+            "slow_dive_30m_fim": "慢速潛水 約30米（FIM）",
+            "sta_4min": "靜態閉氣 約4分鐘",
+            "sprint_dive_20m_cwtb": "衝刺潛水 約20米（CWTB）",
+        },
+    },
+}
+
+
+def example_points_for_lang(lang: str) -> List[ExamplePoint]:
+    labels = TRANSLATIONS[lang]["examples"]
+    return [
+        ExamplePoint(labels[key], time_s=time_s, depth_m=depth_m, color=color)
+        for key, time_s, depth_m, color in EXAMPLE_POINT_DATA
+    ]
 
 
 def isotonic_regression(values: List[float], increasing: bool = True) -> List[float]:
@@ -167,9 +202,15 @@ def main():
         help="Column for max depth (default: max_depth)",
     )
     parser.add_argument(
+        "--lang",
+        default="en",
+        choices=sorted(TRANSLATIONS.keys()),
+        help="Language for plot labels (default: en)",
+    )
+    parser.add_argument(
         "--title",
-        default="Dive Time vs. Max Depth",
-        help="Plot title",
+        default=None,
+        help="Plot title (default: language-specific)",
     )
     parser.add_argument(
         "--no-examples",
@@ -187,16 +228,30 @@ def main():
         default=1.0,
         help="Depth bin size in meters for frontiers (default: 1.0).",
     )
+    parser.add_argument(
+        "--figsize",
+        default="10,4.0",
+        help="Figure size as 'width,height' in inches (default: 10,4.0).",
+    )
     args = parser.parse_args()
+
+    try:
+        fig_width, fig_height = (
+            float(value.strip()) for value in args.figsize.split(",", maxsplit=1)
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError("figsize must be two numbers like '10,4.0'.") from exc
 
     input_path = Path(args.input)
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    strings = TRANSLATIONS[args.lang]
+    title = args.title or strings["title"]
     rows = load_dives(input_path, args.time_col, args.depth_col)
     times = [t for t, _ in rows]
     depths = [d for _, d in rows]
-    fig, ax = plt.subplots(figsize=(10, 4.0))
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
     max_depth = max(depths) if depths else 0.0
     ax.scatter(
         times,
@@ -205,10 +260,10 @@ def main():
         alpha=0.55,
         color="#b8b8b8",
         edgecolors="none",
-        label="Dive Records",
+        label=strings["legend_records"],
     )
     if not args.no_examples:
-        for example in EXAMPLE_POINTS:
+        for example in example_points_for_lang(args.lang):
             ax.scatter(
                 example.time_s,
                 example.depth_m,
@@ -243,7 +298,7 @@ def main():
             slow_times,
             color="#cfe9cf",
             alpha=0.25,
-            label="Feasible Region",
+            label=strings["legend_feasible"],
             edgecolor="none",
             linewidth=0.0,
             zorder=0,
@@ -254,7 +309,7 @@ def main():
             fast_times,
             color="#f2b6b6",
             alpha=0.2,
-            label="Infeasible Region",
+            label=strings["legend_infeasible"],
             edgecolor="none",
             linewidth=0.0,
             zorder=0,
@@ -300,9 +355,9 @@ def main():
             color="#4a4a4a",
             label="_nolegend_",
         )
-    ax.set_title(args.title)
-    ax.set_xlabel("Dive Time (s)")
-    ax.set_ylabel("Max Depth (m)")
+    ax.set_title(title)
+    ax.set_xlabel(strings["xlabel"])
+    ax.set_ylabel(strings["ylabel"])
     ax.set_xlim(left=0, right=250.0)
     ax.set_ylim(-1.0, max_depth + 2.0)
     ax.invert_yaxis()

@@ -11,7 +11,30 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.family"] = ["Arial", "Heiti TC", "sans-serif"]
+
+TRANSLATIONS = {
+    "en": {
+        "title": "Dive Time vs. Max Depth (Performance Frontiers)",
+        "xlabel": "Dive Time (s)",
+        "ylabel": "Max Depth (m)",
+        "legend_records": "Dive Records",
+        "legend_feasible": "Feasible Region",
+        "legend_infeasible": "Infeasible Region",
+        "legend_fast": "Fast Frontier",
+        "legend_slow": "Slow Frontier",
+    },
+    "zh-tw": {
+        "title": "潛水時間與最大深度（表現邊界）",
+        "xlabel": "潛水時間（秒）",
+        "ylabel": "最大深度（米）",
+        "legend_records": "潛水紀錄",
+        "legend_feasible": "能力可及區域",
+        "legend_infeasible": "能力不可及區域",
+        "legend_fast": "快速邊界",
+        "legend_slow": "慢速邊界",
+    },
+}
 
 
 def load_dives(csv_path: str) -> Optional[pd.DataFrame]:
@@ -34,7 +57,7 @@ def plot_td(
     fast_df: pd.DataFrame,
     slow_df: pd.DataFrame,
     title: str,
-    slow_label: str,
+    labels: dict,
     T_sta: float,
 ) -> None:
     plt.figure(figsize=(10.0, 4.0))
@@ -49,7 +72,7 @@ def plot_td(
             alpha=0.55,
             color="#b8b8b8",
             edgecolors="none",
-            label="Dive Records",
+            label=labels["legend_records"],
         )
 
     f = fast_df.dropna(subset=["T", "D"])
@@ -113,7 +136,7 @@ def plot_td(
                     slow_times[feasible_mask],
                     color="#cfe9cf",
                     alpha=0.25,
-                    label="Feasible Region",
+                    label=labels["legend_feasible"],
                     edgecolor="none",
                     linewidth=0.0,
                     zorder=0,
@@ -130,7 +153,7 @@ def plot_td(
             fast_times,
             color="#f2b6b6",
             alpha=0.2,
-            label="Infeasible Region",
+            label=labels["legend_infeasible"],
             edgecolor="none",
             linewidth=0.0,
             zorder=0,
@@ -165,7 +188,7 @@ def plot_td(
         linewidth=1.6,
         linestyle=(0, (6, 3)),
         color="#4a4a4a",
-        label="Fast Frontier",
+        label=labels["legend_fast"],
     )
     plt.plot(
         s["T"],
@@ -173,12 +196,12 @@ def plot_td(
         linewidth=1.6,
         linestyle=(0, (2, 2)),
         color="#4a4a4a",
-        label=slow_label,
+        label=labels["legend_slow"],
     )
 
     plt.title(title)
-    plt.xlabel("Dive Time (s)")
-    plt.ylabel("Max Depth (m)")
+    plt.xlabel(labels["xlabel"])
+    plt.ylabel(labels["ylabel"])
     plt.xlim(left=0, right=250.0)
     plt.ylim(-1.0, max_depth + 2.0)
 
@@ -209,6 +232,12 @@ def main() -> None:
         default="images/frontiers.pdf",
         help="Output image path.",
     )
+    parser.add_argument(
+        "--lang",
+        default="en",
+        choices=sorted(TRANSLATIONS.keys()),
+        help="Language for plot labels (default: en)",
+    )
     parser.add_argument("--T-sta", type=float, default=240.0)
     parser.add_argument(
         "--effort",
@@ -230,13 +259,14 @@ def main() -> None:
     slow_df = frontiers_df[frontiers_df["frontier"] == "slow"]
     dives = load_dives(args.dives_csv) if args.dives_csv else None
 
+    strings = TRANSLATIONS[args.lang]
     plot_td(
         args.output,
         dives,
         fast_df,
         slow_df,
-        title="Dive Time vs. Max Depth (Performance Frontiers)",
-        slow_label="Slow Frontier",
+        title=strings["title"],
+        labels=strings,
         T_sta=args.T_sta,
     )
 

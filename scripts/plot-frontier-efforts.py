@@ -11,7 +11,24 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.family"] = ["Arial", "Heiti TC", "sans-serif"]
+
+TRANSLATIONS = {
+    "en": {
+        "title": "Effort Level Bands for Dives",
+        "xlabel": "Dive Time (s)",
+        "ylabel": "Max Depth (m)",
+        "legend_title": "Effort Level",
+        "legend_records": "Dive Records",
+    },
+    "zh-tw": {
+        "title": "潛水的努力程度帶",
+        "xlabel": "潛水時間（秒）",
+        "ylabel": "最大深度（米）",
+        "legend_title": "努力程度",
+        "legend_records": "潛水紀錄",
+    },
+}
 
 
 def load_dives(csv_path: str) -> Optional[pd.DataFrame]:
@@ -50,7 +67,7 @@ def plot_effort_contours(
     dives: Optional[pd.DataFrame],
     frontiers_df: pd.DataFrame,
     effort_levels: np.ndarray,
-    title: str,
+    labels: dict,
     T_sta: float,
 ) -> None:
     plt.figure(figsize=(10.0, 4.0))
@@ -68,7 +85,7 @@ def plot_effort_contours(
             color="#b8b8b8",
             edgecolors="none",
             zorder=3,
-            label="Dive Records",
+            label=labels["legend_records"],
         )
 
     cmap = plt.get_cmap("RdYlGn_r")
@@ -167,7 +184,7 @@ def plot_effort_contours(
         )
 
     handles = []
-    labels = []
+    legend_labels = []
     sorted_entries = sorted(entries, key=lambda item: item["effort"])
     for idx, entry in enumerate(sorted_entries):
         start = sorted_entries[idx - 1]["effort"] if idx > 0 else 0.0
@@ -175,11 +192,11 @@ def plot_effort_contours(
         handles.append(
             plt.Rectangle((0, 0), 1, 1, facecolor=entry["color"], edgecolor="none")
         )
-        labels.append(f"{start * 100:.0f}–{end * 100:.0f}%")
+        legend_labels.append(f"{start * 100:.0f}–{end * 100:.0f}%")
 
-    plt.title(title)
-    plt.xlabel("Dive Time (s)")
-    plt.ylabel("Max Depth (m)")
+    plt.title(labels["title"])
+    plt.xlabel(labels["xlabel"])
+    plt.ylabel(labels["ylabel"])
     plt.xlim(left=0, right=max(max_time, 250.0))
     plt.ylim(-1.0, max_depth + 2.0)
 
@@ -188,8 +205,8 @@ def plot_effort_contours(
     if handles:
         plt.legend(
             handles=handles,
-            labels=labels,
-            title="Effort Level",
+            labels=legend_labels,
+            title=labels["legend_title"],
             loc="center left",
             bbox_to_anchor=(1.02, 0.5),
             frameon=True,
@@ -225,6 +242,12 @@ def main() -> None:
         help="Comma-separated effort levels (fractions). Default: all in CSV.",
     )
     parser.add_argument("--T-sta", type=float, default=240.0)
+    parser.add_argument(
+        "--lang",
+        default="en",
+        choices=sorted(TRANSLATIONS.keys()),
+        help="Language for plot labels (default: en)",
+    )
 
     args = parser.parse_args()
 
@@ -244,12 +267,13 @@ def main() -> None:
 
     dives = load_dives(args.dives_csv) if args.dives_csv else None
 
+    strings = TRANSLATIONS[args.lang]
     plot_effort_contours(
         args.output,
         dives,
         frontiers_df,
         effort_levels,
-        title="Effort Level Bands for Dives",
+        labels=strings,
         T_sta=args.T_sta,
     )
 
