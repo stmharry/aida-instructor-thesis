@@ -51,7 +51,7 @@ uv sync
 make
 ```
 
-## Notes
+## Related Materials
 
-- Some plots generate CSV outputs into `data/` before plotting (see `Makefile`).
-- Plot targets include `make plot.pdf`, `make plot.png`, `make plot-frontier.default.pdf`, `make plot-frontier.default.png`, `make plot-frontier-zx.pdf`, and `make plot-frontier-zx.png`.
+- [Slides (in Traditional Chinese)](https://aida-instructor-thesis-presentation.stmharry.io): A friendly version of the thesis for general audiences.
+- [Live Presentation Video (in Traditional Chinese)](https://youtu.be/KdgPkgv5400): A recorded presentation of the thesis.
