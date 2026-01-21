@@ -63,8 +63,10 @@ def plot_td(
     plt.figure(figsize=(10.0, 4.0))
 
     max_depth = 0.0
+    max_time = 0.0
     if dives is not None:
         max_depth = max(max_depth, float(dives["max_depth"].max()))
+        max_time = max(max_time, float(dives["duration"].max()))
         plt.scatter(
             dives["duration"],
             dives["max_depth"],
@@ -82,11 +84,16 @@ def plot_td(
     if not s.empty:
         max_depth = max(max_depth, float(s["D"].max()))
 
-    if not f.empty:
+    has_fast = not f.empty
+    has_slow = not s.empty
+    has_both = has_fast and has_slow
+
+    if has_fast:
         fast_depths = f["D"].to_numpy()
         fast_values = f["T"].to_numpy()
+        max_time = max(max_time, float(f["T"].max()))
         grid_size = max(len(f), len(s), 2)
-        if not s.empty:
+        if has_slow:
             slow_depths = s["D"].to_numpy()
             depth_limit = min(float(fast_depths.max()), float(slow_depths.max()))
             max_depth_grid = depth_limit
@@ -109,8 +116,9 @@ def plot_td(
             )
 
         slow_times = np.full_like(fast_times, np.nan)
-        if not s.empty:
+        if has_slow:
             slow_values = s["T"].to_numpy()
+            max_time = max(max_time, float(s["T"].max()))
             slow_times = np.interp(
                 depth_vals,
                 slow_depths,
@@ -127,7 +135,7 @@ def plot_td(
                     * (depth_vals[shallow_mask] / slow_min_depth)
                 )
 
-        if not s.empty:
+        if has_slow:
             feasible_mask = np.isfinite(fast_times) & np.isfinite(slow_times)
             if feasible_mask.any():
                 plt.fill_betweenx(
@@ -136,16 +144,11 @@ def plot_td(
                     slow_times[feasible_mask],
                     color="#cfe9cf",
                     alpha=0.25,
-                    label=labels["legend_feasible"],
+                    label=labels["legend_feasible"] if has_both else "_nolegend_",
                     edgecolor="none",
                     linewidth=0.0,
                     zorder=0,
                 )
-        max_time = (
-            max(float(f["T"].max()), float(s["T"].max()))
-            if not f.empty and not s.empty
-            else 0.0
-        )
         max_time = max(max_time, 250.0)
         plt.fill_betweenx(
             depth_vals,
@@ -153,7 +156,7 @@ def plot_td(
             fast_times,
             color="#f2b6b6",
             alpha=0.2,
-            label=labels["legend_infeasible"],
+            label=labels["legend_infeasible"] if has_both else "_nolegend_",
             edgecolor="none",
             linewidth=0.0,
             zorder=0,
@@ -182,27 +185,35 @@ def plot_td(
             zorder=0,
         )
 
-    plt.plot(
-        f["T"],
-        f["D"],
-        linewidth=1.6,
-        linestyle=(0, (6, 3)),
-        color="#4a4a4a",
-        label=labels["legend_fast"],
-    )
-    plt.plot(
-        s["T"],
-        s["D"],
-        linewidth=1.6,
-        linestyle=(0, (2, 2)),
-        color="#4a4a4a",
-        label=labels["legend_slow"],
-    )
+    if has_fast:
+        plt.plot(
+            f["T"],
+            f["D"],
+            linewidth=1.6,
+            linestyle=(0, (6, 3)),
+            color="#4a4a4a",
+            label=labels["legend_fast"],
+        )
+    if has_slow:
+        plt.plot(
+            s["T"],
+            s["D"],
+            linewidth=1.6,
+            linestyle=(0, (2, 2)),
+            color="#4a4a4a",
+            label=labels["legend_slow"],
+        )
 
     plt.title(title)
     plt.xlabel(labels["xlabel"])
     plt.ylabel(labels["ylabel"])
-    plt.xlim(left=0, right=250.0)
+    if max_time <= 0.0:
+        max_time = 250.0
+    if not has_fast and not has_slow:
+        xlim_right = max_time * 1.05
+    else:
+        xlim_right = max(max_time, 250.0)
+    plt.xlim(left=0, right=xlim_right)
     plt.ylim(-1.0, max_depth + 2.0)
 
     plt.gca().invert_yaxis()
@@ -217,8 +228,8 @@ def main() -> None:
     parser.add_argument(
         "--frontiers-csv",
         type=str,
-        default="data/frontiers.csv",
-        help="Path to frontiers CSV",
+        default="",
+        help="Path to frontiers CSV (set to empty string to skip frontiers)",
     )
     parser.add_argument(
         "--dives-csv",
@@ -250,13 +261,17 @@ def main() -> None:
 
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
 
-    frontiers_df = pd.read_csv(args.frontiers_csv)
-    if "effort" in frontiers_df.columns:
-        frontiers_df = frontiers_df[
-            np.isclose(frontiers_df["effort"], args.effort)
-        ]
-    fast_df = frontiers_df[frontiers_df["frontier"] == "fast"]
-    slow_df = frontiers_df[frontiers_df["frontier"] == "slow"]
+    if args.frontiers_csv:
+        frontiers_df = pd.read_csv(args.frontiers_csv)
+        if "effort" in frontiers_df.columns:
+            frontiers_df = frontiers_df[
+                np.isclose(frontiers_df["effort"], args.effort)
+            ]
+        fast_df = frontiers_df[frontiers_df["frontier"] == "fast"]
+        slow_df = frontiers_df[frontiers_df["frontier"] == "slow"]
+    else:
+        fast_df = pd.DataFrame(columns=["T", "D", "frontier"])
+        slow_df = pd.DataFrame(columns=["T", "D", "frontier"])
     dives = load_dives(args.dives_csv) if args.dives_csv else None
 
     strings = TRANSLATIONS[args.lang]

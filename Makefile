@@ -175,3 +175,13 @@ images/frontier-usage.zx.pdf: scripts/plot-frontier-usage.py $(FRONTIERS_ZX)
 	@$(PYTHON) $< \
 	  --frontiers-csv $(FRONTIERS_ZX) \
 	  --output $@
+
+#
+
+DIVES_HYH_CWT ?= data/dives.hyh-cwt.csv
+
+images/frontiers.hyh-cwt.pdf: scripts/plot-frontiers.py $(DIVES_HYH_CWT)
+	@$(PYTHON) $< \
+	  --dives-csv $(DIVES_HYH_CWT) \
+	  --output $@ \
+	  --T-sta 436
