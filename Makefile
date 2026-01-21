@@ -87,7 +87,7 @@ PLOT_FRONTIER_DEFAULT_TARGETS = \
 .PHONY: plot-frontier.default.pdf
 plot-frontier.default.pdf: $(PLOT_FRONTIER_DEFAULT_TARGETS) 
 
-.PHONY: ppython scripts/plot-frontiers.py --lang zh-twlot-frontier.default.png
+.PHONY: plot-frontier.default.png
 plot-frontier.default.png: $(PLOT_FRONTIER_DEFAULT_TARGETS:.pdf=.png)
 
 $(FRONTIERS_DEFAULT) $(PROFILES_DEFAULT): scripts/compute-frontiers.py
